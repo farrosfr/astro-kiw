@@ -1,0 +1,24 @@
+---
+import type { Product } from '../data/products';
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const formattedPrice = new Intl.NumberFormat('id-ID', {
+  style: 'currency',
+  currency: 'IDR',
+  minimumFractionDigits: 0,
+}).format(product.price);
+---
+
+<div class="border rounded-lg shadow-md overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300">
+  <a href={`/products/${product.id}`}>
+    <img src={product.imageUrl} alt={`Gambar ${product.name}`} class="w-full h-48 object-cover">
+    <div class="p-4">
+      <h3 class="text-lg font-semibold text-gray-800 truncate">{product.name}</h3>
+      <p class="text-xl font-bold text-gray-900 mt-2">{formattedPrice}</p>
+    </div>
+  </a>
+</div>

@@ -9,8 +9,10 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/node": "^9.5.0",
     "@tailwindcss/vite": "^4.1.15",
     "astro": "^5.14.7",
+    "mysql2": "^3.15.2",
     "tailwindcss": "^4.1.15"
   }
 }
