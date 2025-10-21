@@ -4,43 +4,69 @@ import ProductCard from '../components/ProductCard.astro';
 import { pool } from '../lib/db';
 import type { Product } from '../data/products';
 
-let products: Product[] = [];
+// Fetch products for the preview section
+let previewProducts: Product[] = [];
 let error: string | null = null;
 
 try {
-  const [rows] = await pool.query('SELECT id, name, price, imageUrl, description FROM products ORDER BY created_at DESC');
-  // The database returns a RowDataPacket array, we need to cast it and convert id to string for our component
-  products = (rows as any[]).map(row => ({
+  const [rows] = await pool.query('SELECT id, name, price, imageUrl, description FROM products ORDER BY created_at DESC LIMIT 4');
+  previewProducts = (rows as any[]).map(row => ({
     ...row,
     id: String(row.id),
   }));
 } catch (e: any) {
   console.error(e);
-  error = "Tidak dapat memuat produk. Silakan coba lagi nanti.";
+  // Don't block the whole page if the preview fails to load
+  error = "Gagal memuat pratinjau produk."; 
 }
 ---
 
-<Layout>
-  <main class="p-4 sm:p-6 md:p-8">
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Katalog Produk</h1>
-    
-    {error && (
-      <div class="text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <strong class="font-bold">Error!</strong>
-        <span class="block sm:inline"> {error}</span>
+<Layout title="Beranda">
+  <!-- Hero Section -->
+  <section class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+      <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+        <span class="block">Sonus<span class="text-blue-600">HUB</span></span>
+      </h1>
+      <p class="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-gray-600">
+        Platform B2B dan B2G untuk material listrik, solusi industri cerdas, dan teknologi energi terbarukan. Kami menghubungkan bisnis dan pemerintah dengan produk serta sumber daya yang dibutuhkan untuk memenuhi kebutuhan proyek yang sedang Anda kerjakan.
+      </p>
+      <div class="mt-8 flex justify-center">
+        <div class="inline-flex rounded-md shadow">
+          <a href="/katalog" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+            Jelajahi Katalog
+          </a>
+        </div>
       </div>
-    )}
-
-    {!error && products.length === 0 && (
-      <p class="text-center text-gray-500">Belum ada produk di dalam database.</p>
-    )}
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
-      {
-        products.map(product => (
-          <ProductCard product={product} />
-        ))
-      }
     </div>
-  </main>
+  </section>
+
+  <!-- Product Preview Section -->
+  {previewProducts.length > 0 && (
+    <section class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <h2 class="text-3xl font-extrabold text-gray-900">Pratinjau Katalog Produk</h2>
+          <p class="mt-4 text-lg text-gray-600">Lihat beberapa produk unggulan yang tersedia di platform kami.</p>
+        </div>
+        <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {previewProducts.map(product => (
+            <ProductCard product={product} />
+          ))}
+        </div>
+        <div class="mt-12 text-center">
+          <a href="/katalog" class="inline-block px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-100 hover:bg-blue-200">
+            Lihat Semua Produk &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {error && (
+      <div class="text-center py-10">
+        <p class="text-red-500">{error}</p>
+      </div>
+  )}
+
 </Layout>
