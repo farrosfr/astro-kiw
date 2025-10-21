@@ -1,42 +1,67 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { MOCK_PRODUCTS, type Product } from '../../data/products';
-
-export function getStaticPaths() {
-  return MOCK_PRODUCTS.map(product => {
-    return { params: { id: product.id } };
-  });
-}
+import { pool } from '../../lib/db';
+import type { Product } from '../../data/products';
 
 const { id } = Astro.params;
-const product = MOCK_PRODUCTS.find(p => p.id === id);
 
-if (!product) {
+if (!id) {
   return Astro.redirect('/404');
 }
 
-const formattedPrice = new Intl.NumberFormat('id-ID', {
+let product: Product | null = null;
+let error: string | null = null;
+
+try {
+  const [rows] = await pool.query('SELECT id, name, price, imageUrl, description FROM products WHERE id = ?', [id]);
+  const productResult = (rows as any[])[0];
+
+  if (productResult) {
+    product = {
+      ...productResult,
+      id: String(productResult.id),
+    };
+  } else {
+    return Astro.redirect('/404');
+  }
+} catch (e: any) {
+  console.error(e);
+  error = "Tidak dapat memuat produk. Silakan coba lagi nanti.";
+}
+
+// We handle the case where product is null in the template
+const formattedPrice = product ? new Intl.NumberFormat('id-ID', {
   style: 'currency',
   currency: 'IDR',
   minimumFractionDigits: 0,
-}).format(product.price);
+}).format(product.price) : '';
 ---
 
 <Layout>
   <main class="p-4 sm:p-6 md:p-8">
     <div class="max-w-4xl mx-auto">
       <a href="/" class="text-blue-600 hover:underline mb-6 inline-block">&larr; Kembali ke Katalog</a>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <img src={product.imageUrl} alt={`Gambar ${product.name}`} class="w-full h-auto rounded-lg shadow-md">
+
+      {error && (
+        <div class="text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <strong class="font-bold">Error!</strong>
+          <span class="block sm:inline"> {error}</span>
         </div>
-        <div>
-          <h1 class="text-3xl font-bold text-gray-900">{product.name}</h1>
-          <p class="text-2xl font-bold text-gray-800 my-4">{formattedPrice}</p>
-          <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Deskripsi Produk</h2>
-          <p class="text-gray-600 leading-relaxed">{product.description}</p>
+      )}
+
+      {product && (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <img src={product.imageUrl} alt={`Gambar ${product.name}`} class="w-full h-auto rounded-lg shadow-md">
+          </div>
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900">{product.name}</h1>
+            <p class="text-2xl font-bold text-gray-800 my-4">{formattedPrice}</p>
+            <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Deskripsi Produk</h2>
+            <p class="text-gray-600 leading-relaxed">{product.description}</p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   </main>
 </Layout>

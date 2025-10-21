@@ -1,15 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProductCard from '../components/ProductCard.astro';
-import { MOCK_PRODUCTS } from '../data/products';
+import { pool } from '../lib/db';
+import type { Product } from '../data/products';
+
+let products: Product[] = [];
+let error: string | null = null;
+
+try {
+  const [rows] = await pool.query('SELECT id, name, price, imageUrl, description FROM products ORDER BY created_at DESC');
+  // The database returns a RowDataPacket array, we need to cast it and convert id to string for our component
+  products = (rows as any[]).map(row => ({
+    ...row,
+    id: String(row.id),
+  }));
+} catch (e: any) {
+  console.error(e);
+  error = "Tidak dapat memuat produk. Silakan coba lagi nanti.";
+}
 ---
 
 <Layout>
   <main class="p-4 sm:p-6 md:p-8">
     <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Katalog Produk</h1>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    
+    {error && (
+      <div class="text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline"> {error}</span>
+      </div>
+    )}
+
+    {!error && products.length === 0 && (
+      <p class="text-center text-gray-500">Belum ada produk di dalam database.</p>
+    )}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
       {
-        MOCK_PRODUCTS.map(product => (
+        products.map(product => (
           <ProductCard product={product} />
         ))
       }
