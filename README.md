@@ -13,16 +13,40 @@ Inside of your Astro project, you'll see the following folders and files:
 ```text
 /
 ├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
+│   ├── favicon.svg
+│   ├── logo.png
+│   └── placeholders/
+│       ├── kabel-nym.webp
+│       ├── lampu-led.jpg
+│       ├── mcb.webp
+│       └── stop-kontak.webp
+├── src/
+│   ├── assets/
+│   │   ├── astro.svg
+│   │   └── background.svg
+│   ├── components/
+│   │   ├── Footer.astro
+│   │   ├── Header.astro
+│   │   ├── ProductCard.astro
+│   │   └── Welcome.astro
+│   ├── data/
+│   │   └── products.ts
+│   ├── layouts/
+│   │   └── Layout.astro
+│   ├── lib/
+│   │   └── db.ts
+│   ├── pages/
+│   │   ├── api/
+│   │   │   └── search.ts
+│   │   ├── product/
+│   │   │   └── [id].astro
+│   │   ├── blog.astro
+│   │   ├── index.astro
+│   │   ├── katalog.astro
+│   │   ├── kategori.astro
+│   │   └── merk.astro
+│   └── styles/
+│       └── global.css
 └── package.json
 ```
 
