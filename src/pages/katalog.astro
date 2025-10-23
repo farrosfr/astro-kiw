@@ -8,7 +8,7 @@ let products: Product[] = [];
 let error: string | null = null;
 
 try {
-  const [rows] = await pool.query('SELECT id, name, price, imageUrl, description FROM products ORDER BY created_at DESC');
+  const [rows] = await pool.query('SELECT id, name, price, imageUrl, description, slug, kategori, brand FROM products ORDER BY created_at DESC');
   products = (rows as any[]).map(row => ({
     ...row,
     id: String(row.id),
