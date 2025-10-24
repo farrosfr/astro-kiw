@@ -13,12 +13,25 @@ const formattedPrice = new Intl.NumberFormat('id-ID', {
 }).format(product.price);
 ---
 
-<div class="border rounded-lg shadow-md overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300">
-  <a href={`/product/${product.id}`}>
+<div class="border rounded-lg shadow-md overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300 flex flex-col">
+  <a href={`/product/${product.slug}`}>
     <img src={product.imageUrl} alt={`Gambar ${product.name}`} class="w-full aspect-square object-cover">
-    <div class="p-4">
-      <h3 class="text-lg font-semibold text-gray-800 truncate">{product.name}</h3>
-      <p class="text-xl font-bold text-gray-900 mt-2">{formattedPrice}</p>
-    </div>
   </a>
+  <div class="p-4 flex flex-col flex-grow">
+    <h3 class="text-lg font-semibold text-gray-800 truncate" title={product.name}>
+      <a href={`/product/${product.slug}`} class="hover:text-blue-600">{product.name}</a>
+    </h3>
+    <div class="text-sm text-gray-500 mt-1">
+      {product.kategori && (
+        <a href={`/kategori/${product.kategori.toLowerCase().replace(/\s+/g, '-')}`} class="hover:underline">{product.kategori}</a>
+      )}
+      {product.kategori && product.brand && <span class="mx-1">&bull;</span>}
+      {product.brand && (
+        <a href={`/merk/${product.brand.toLowerCase().replace(/\s+/g, '-')}`} class="hover:underline">{product.brand}</a>
+      )}
+    </div>
+    <div class="mt-auto pt-2">
+      <p class="text-xl font-bold text-gray-900">{formattedPrice}</p>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,61 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { pool } from '../../lib/db';
+import type { Product } from '../../data/products';
+
+const { kategori: kategoriSlug } = Astro.params;
+
+if (!kategoriSlug) {
+  return Astro.redirect('/404');
+}
+
+// Convert slug back to title case for querying the database
+// e.g., "perangkat-proteksi" -> "Perangkat Proteksi"
+const kategoriName = kategoriSlug
+  .split('-')
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
+
+let products: Product[] = [];
+let error: string | null = null;
+
+try {
+  const [rows] = await pool.query('SELECT id, name, price, imageUrl, description, slug, kategori, brand FROM products WHERE kategori = ?', [kategoriName]);
+  products = (rows as any[]).map(row => ({
+    ...row,
+    id: String(row.id),
+  }));
+} catch (e: any) {
+  console.error(e);
+  error = "Tidak dapat memuat produk untuk kategori ini.";
+}
+---
+
+<Layout title={`Kategori: ${kategoriName}`}>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <a href="/katalog" class="text-blue-600 hover:underline mb-6 inline-block">&larr; Kembali ke Katalog</a>
+    <h1 class="text-4xl font-bold text-center mb-12">
+      Kategori: <span class="text-blue-600">{kategoriName}</span>
+    </h1>
+    
+    {error && (
+      <div class="text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline"> {error}</span>
+      </div>
+    )}
+
+    {!error && products.length === 0 && (
+      <p class="text-center text-gray-500">Tidak ada produk yang ditemukan dalam kategori ini.</p>
+    )}
+
+    {products.length > 0 && (
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map(product => (
+          <ProductCard product={product} />
+        ))
+      }
+    </div>
+  </main>
+</Layout>
