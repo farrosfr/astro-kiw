@@ -1,10 +1,46 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { pool } from '../lib/db';
+
+interface Brand {
+  brand: string;
+}
+
+let brands: Brand[] = [];
+let error: string | null = null;
+
+try {
+  const [rows] = await pool.query('SELECT DISTINCT brand FROM products ORDER BY brand ASC');
+  brands = rows as Brand[];
+} catch (e: any) {
+  console.error(e);
+  error = "Tidak dapat memuat daftar merk. Silakan coba lagi nanti.";
+}
 ---
 
-<Layout title="Merk Produk">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-4xl font-bold">Halaman Merk</h1>
-    <p class="mt-4 text-lg text-gray-600">Konten untuk merk produk akan ditampilkan di sini.</p>
-  </div>
+<Layout title="Daftar Merk Produk">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-4xl font-bold text-center mb-12">Daftar Merk Produk</h1>
+    
+    {error && (
+      <div class="text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline"> {error}</span>
+      </div>
+    )}
+
+    {!error && brands.length === 0 && (
+      <p class="text-center text-gray-500">Tidak ada merk yang ditemukan.</p>
+    )}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {
+        brands.map(brand => (
+          <a href={`/merk/${brand.brand}`} class="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center">
+            <h2 class="text-xl font-semibold text-gray-800">{brand.brand}</h2>
+          </a>
+        ))
+      }
+    </div>
+  </main>
 </Layout>
