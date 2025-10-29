@@ -59,8 +59,10 @@ This section documents the main pages and API endpoints of the application.
 - `/` (`src/pages/index.astro`): The homepage.
 - `/katalog` (`src/pages/katalog.astro`): Displays a full catalog of all products, fetched directly from the database.
 - `/product/[slug]` (`src/pages/product/[slug].astro`): Shows the detail page for a single product. It fetches the product from the database based on its unique `slug`.
-- `/kategori/[kategori]` (`src/pages/kategori/[kategori].astro`): (To be created) Will display all products belonging to a specific category.
-- `/merk/[brand]` (`src/pages/merk/[brand].astro`): (To be created) Will display all products belonging to a specific brand.
+- `/kategori` (`src/pages/kategori.astro`): Displays a list of all available product categories.
+- `/kategori/[kategori]` (`src/pages/kategori/[kategori].astro`): Displays all products belonging to a specific category.
+- `/merk` (`src/pages/merk.astro`): Displays a list of all available product brands.
+- `/merk/[brand]` (`src/pages/merk/[brand].astro`): Displays all products belonging to a specific brand.
 - `/api/search` (`src/pages/api/search.ts`): An API endpoint for searching products.
 
 ## 🧞 Commands
