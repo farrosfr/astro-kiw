@@ -134,82 +134,87 @@ const formattedPrice = product ? new Intl.NumberFormat('id-ID', {
 </Layout>
 
 <script is:inline>
-  const openRfqModalBtn = document.getElementById('openRfqModal');
-  const rfqModal = document.getElementById('rfqModal');
-  const closeRfqModalBtn = document.getElementById('closeRfqModal');
-  const rfqForm = document.getElementById('rfqForm');
-  const rfqMessage = document.getElementById('rfqMessage');
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('Script block is running!'); // Added for debugging
+    const openRfqModalBtn = document.getElementById('openRfqModal');
+    const rfqModal = document.getElementById('rfqModal');
+    const closeRfqModalBtn = document.getElementById('closeRfqModal');
+    const rfqForm = document.getElementById('rfqForm');
+    const rfqMessage = document.getElementById('rfqMessage');
 
-  openRfqModalBtn?.addEventListener('click', () => {
-    rfqModal.classList.remove('hidden');
-  });
+    console.log('openRfqModalBtn:', openRfqModalBtn); // Added for debugging
 
-  closeRfqModalBtn?.addEventListener('click', () => {
-    rfqModal.classList.add('hidden');
-    rfqMessage.textContent = ''; // Clear messages on close
-    rfqForm.reset(); // Reset form fields
-  });
+    openRfqModalBtn?.addEventListener('click', () => {
+      rfqModal.classList.remove('hidden');
+    });
 
-  rfqModal?.addEventListener('click', (event) => {
-    if (event.target === rfqModal) {
+    closeRfqModalBtn?.addEventListener('click', () => {
       rfqModal.classList.add('hidden');
       rfqMessage.textContent = ''; // Clear messages on close
       rfqForm.reset(); // Reset form fields
-    }
-  });
+    });
 
-  rfqForm?.addEventListener('submit', async (event) => {
-    event.preventDefault();
+    rfqModal?.addEventListener('click', (event) => {
+      if (event.target === rfqModal) {
+        rfqModal.classList.add('hidden');
+        rfqMessage.textContent = ''; // Clear messages on close
+        rfqForm.reset(); // Reset form fields
+      }
+    });
 
-    rfqMessage.textContent = 'Mengirim...';
-    rfqMessage.className = 'text-center mt-4 text-sm text-gray-600';
+    rfqForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
 
-    const productId = (document.getElementById('rfqProductId') as HTMLInputElement)?.value;
-    const productName = (document.getElementById('rfqProductName') as HTMLInputElement)?.value;
-    const quantity = parseInt((document.getElementById('quantity') as HTMLInputElement)?.value);
-    const customerName = (document.getElementById('customerName') as HTMLInputElement)?.value;
-    const companyName = (document.getElementById('companyName') as HTMLInputElement)?.value;
-    const email = (document.getElementById('email') as HTMLInputElement)?.value;
-    const phone = (document.getElementById('phone') as HTMLInputElement)?.value;
-    const message = (document.getElementById('message') as HTMLTextAreaElement)?.value;
+      rfqMessage.textContent = 'Mengirim...';
+      rfqMessage.className = 'text-center mt-4 text-sm text-gray-600';
 
-    try {
-      const response = await fetch('/api/rfq', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productId,
-          productName,
-          quantity,
-          customerName,
-          companyName,
-          email,
-          phone,
-          message,
-        }),
-      });
+      const productId = document.getElementById('rfqProductId')?.value;
+      const productName = document.getElementById('rfqProductName')?.value;
+      const quantity = parseInt(document.getElementById('quantity')?.value || '0');
+      const customerName = document.getElementById('customerName')?.value;
+      const companyName = document.getElementById('companyName')?.value;
+      const email = document.getElementById('email')?.value;
+      const phone = document.getElementById('phone')?.value;
+      const message = document.getElementById('message')?.value;
 
-      const result = await response.json();
+      try {
+        const response = await fetch('/api/rfq', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            productId,
+            productName,
+            quantity,
+            customerName,
+            companyName,
+            email,
+            phone,
+            message,
+          }),
+        });
 
-      if (response.ok) {
-        rfqMessage.textContent = 'Permintaan penawaran berhasil dikirim! Kami akan segera menghubungi Anda.';
-        rfqMessage.className = 'text-center mt-4 text-sm text-green-600';
-        rfqForm.reset();
-        // Optionally close modal after a delay
-        setTimeout(() => {
-          rfqModal.classList.add('hidden');
-          rfqMessage.textContent = '';
-        }, 3000);
-      } else {
-        rfqMessage.textContent = `Gagal mengirim permintaan: ${result.message || 'Terjadi kesalahan.'}`;
+        const result = await response.json();
+
+        if (response.ok) {
+          rfqMessage.textContent = 'Permintaan penawaran berhasil dikirim! Kami akan segera menghubungi Anda.';
+          rfqMessage.className = 'text-center mt-4 text-sm text-green-600';
+          rfqForm.reset();
+          // Optionally close modal after a delay
+          setTimeout(() => {
+            rfqModal.classList.add('hidden');
+            rfqMessage.textContent = '';
+          }, 3000);
+        } else {
+          rfqMessage.textContent = `Gagal mengirim permintaan: ${result.message || 'Terjadi kesalahan.'}`;
+          rfqMessage.className = 'text-center mt-4 text-sm text-red-600';
+        }
+      } catch (error) {
+        console.error('Error submitting RFQ form:', error);
+        rfqMessage.textContent = 'Terjadi kesalahan jaringan atau server. Silakan coba lagi.';
         rfqMessage.className = 'text-center mt-4 text-sm text-red-600';
       }
-    } catch (error) {
-      console.error('Error submitting RFQ form:', error);
-      rfqMessage.textContent = 'Terjadi kesalahan jaringan atau server. Silakan coba lagi.';
-      rfqMessage.className = 'text-center mt-4 text-sm text-red-600';
-    }
+    });
   });
 </script>
