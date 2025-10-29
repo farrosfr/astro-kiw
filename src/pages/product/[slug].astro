@@ -65,9 +65,151 @@ const formattedPrice = product ? new Intl.NumberFormat('id-ID', {
             <p class="text-2xl font-bold text-gray-800 my-4">{formattedPrice}</p>
             <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Deskripsi Produk</h2>
             <p class="text-gray-600 leading-relaxed">{product.description}</p>
+
+            <button id="openRfqModal" class="mt-8 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+              Minta Penawaran
+            </button>
           </div>
         </div>
       )}
     </div>
   </main>
+
+  <!-- RFQ Modal -->
+  <div id="rfqModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+      <div class="mt-3 text-center">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Minta Penawaran untuk {product?.name}</h3>
+        <div class="mt-2 px-7 py-3">
+          <form id="rfqForm" class="space-y-4">
+            <input type="hidden" id="rfqProductId" value={product?.id} />
+            <input type="hidden" id="rfqProductName" value={product?.name} />
+
+            <div>
+              <label for="quantity" class="block text-sm font-medium text-gray-700">Kuantitas</label>
+              <input type="number" id="quantity" name="quantity" min="1" value="1" required
+                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="customerName" class="block text-sm font-medium text-gray-700">Nama Anda</label>
+              <input type="text" id="customerName" name="customerName" required
+                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="companyName" class="block text-sm font-medium text-gray-700">Nama Perusahaan (Opsional)</label>
+              <input type="text" id="companyName" name="companyName"
+                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+              <input type="email" id="email" name="email" required
+                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-medium text-gray-700">Nomor Telepon (WhatsApp)</label>
+              <input type="tel" id="phone" name="phone" required
+                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-700">Pesan / Persyaratan Tambahan (Opsional)</label>
+              <textarea id="message" name="message" rows="3"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
+            </div>
+            <div id="rfqMessage" class="text-center mt-4 text-sm"></div>
+            <div class="items-center px-4 py-3">
+              <button id="submitRfq" type="submit"
+                      class="px-4 py-2 bg-blue-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Kirim Permintaan
+              </button>
+              <button id="closeRfqModal" type="button"
+                      class="mt-3 px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                Batal
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </Layout>
+
+<script is:inline>
+  const openRfqModalBtn = document.getElementById('openRfqModal');
+  const rfqModal = document.getElementById('rfqModal');
+  const closeRfqModalBtn = document.getElementById('closeRfqModal');
+  const rfqForm = document.getElementById('rfqForm');
+  const rfqMessage = document.getElementById('rfqMessage');
+
+  openRfqModalBtn?.addEventListener('click', () => {
+    rfqModal.classList.remove('hidden');
+  });
+
+  closeRfqModalBtn?.addEventListener('click', () => {
+    rfqModal.classList.add('hidden');
+    rfqMessage.textContent = ''; // Clear messages on close
+    rfqForm.reset(); // Reset form fields
+  });
+
+  rfqModal?.addEventListener('click', (event) => {
+    if (event.target === rfqModal) {
+      rfqModal.classList.add('hidden');
+      rfqMessage.textContent = ''; // Clear messages on close
+      rfqForm.reset(); // Reset form fields
+    }
+  });
+
+  rfqForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    rfqMessage.textContent = 'Mengirim...';
+    rfqMessage.className = 'text-center mt-4 text-sm text-gray-600';
+
+    const productId = (document.getElementById('rfqProductId') as HTMLInputElement)?.value;
+    const productName = (document.getElementById('rfqProductName') as HTMLInputElement)?.value;
+    const quantity = parseInt((document.getElementById('quantity') as HTMLInputElement)?.value);
+    const customerName = (document.getElementById('customerName') as HTMLInputElement)?.value;
+    const companyName = (document.getElementById('companyName') as HTMLInputElement)?.value;
+    const email = (document.getElementById('email') as HTMLInputElement)?.value;
+    const phone = (document.getElementById('phone') as HTMLInputElement)?.value;
+    const message = (document.getElementById('message') as HTMLTextAreaElement)?.value;
+
+    try {
+      const response = await fetch('/api/rfq', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productId,
+          productName,
+          quantity,
+          customerName,
+          companyName,
+          email,
+          phone,
+          message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        rfqMessage.textContent = 'Permintaan penawaran berhasil dikirim! Kami akan segera menghubungi Anda.';
+        rfqMessage.className = 'text-center mt-4 text-sm text-green-600';
+        rfqForm.reset();
+        // Optionally close modal after a delay
+        setTimeout(() => {
+          rfqModal.classList.add('hidden');
+          rfqMessage.textContent = '';
+        }, 3000);
+      } else {
+        rfqMessage.textContent = `Gagal mengirim permintaan: ${result.message || 'Terjadi kesalahan.'}`;
+        rfqMessage.className = 'text-center mt-4 text-sm text-red-600';
+      }
+    } catch (error) {
+      console.error('Error submitting RFQ form:', error);
+      rfqMessage.textContent = 'Terjadi kesalahan jaringan atau server. Silakan coba lagi.';
+      rfqMessage.className = 'text-center mt-4 text-sm text-red-600';
+    }
+  });
+</script>
