@@ -9,7 +9,7 @@ let previewProducts: Product[] = [];
 let error: string | null = null;
 
 try {
-  const [rows] = await pool.query('SELECT id, name, price, imageUrl, description FROM products ORDER BY created_at DESC LIMIT 4');
+  const [rows] = await pool.query('SELECT id, name, price, imageUrl, description, slug FROM products ORDER BY created_at DESC LIMIT 4');
   previewProducts = (rows as any[]).map(row => ({
     ...row,
     id: String(row.id),
