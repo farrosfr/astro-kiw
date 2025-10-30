@@ -54,6 +54,44 @@ This section documents the main pages and API endpoints of the application.
 
 In this project, state management is handled locally within the components that require it. There is no global state management library (like Nanostores or Redux) implemented. Any client-side interactivity relies on standard browser APIs and client-side scripts defined within the Astro components themselves. This approach keeps the project lightweight and is well-suited for content-focused websites where global state is not a primary concern.
 
+## Database
+
+This project uses a **MySQL** database to store product information. The connection is managed through a connection pool using the `mysql2` library, as configured in `src/lib/db.ts`.
+
+### Tabel `products`
+
+This is the primary table in the database, containing all product data.
+
+| Column      | Type          | Description                                                  |
+| :---------- | :------------ | :----------------------------------------------------------- |
+| `id`        | `INT` (PK)    | The unique identifier for each product.                      |
+| `name`      | `VARCHAR(255)`| The name of the product.                                     |
+| `description`| `TEXT`        | A detailed description of the product.                       |
+| `price`     | `DECIMAL`     | The price of the product.                                    |
+| `imageUrl`  | `VARCHAR(255)`| The URL path to the product's image.                         |
+| `slug`      | `VARCHAR(255)`| A URL-friendly slug for the product page (e.g., `kabel-nym-3x2-5mm`). |
+| `kategori`  | `VARCHAR(255)`| The category the product belongs to.                         |
+| `brand`     | `VARCHAR(255)`| The brand name of the product.                               |
+| `created_at`| `TIMESTAMP`   | The timestamp when the product was added (defaults to `CURRENT_TIMESTAMP`). |
+
+### Tabel `rfq` (Request for Quote)
+
+This table stores submissions from the "Request for Quote" form.
+
+| Column          | Type          | Description                                                 |
+| :-------------- | :------------ | :---------------------------------------------------------- |
+| `id`            | `INT` (PK)    | The unique identifier for each RFQ submission.              |
+| `product_id`    | `INT`         | Foreign key referencing the `id` of the requested product.  |
+| `product_name`  | `VARCHAR(255)`| The name of the product at the time of the request.         |
+| `quantity`      | `INT`         | The quantity of the product being requested.                |
+| `customer_name` | `VARCHAR(255)`| The name of the customer submitting the request.            |
+| `company_name`  | `VARCHAR(255)`| The customer's company name (optional).                     |
+| `email`         | `VARCHAR(255)`| The customer's email address.                               |
+| `phone`         | `VARCHAR(50)` | The customer's phone number.                                |
+| `message`       | `TEXT`        | Any additional message from the customer (optional).        |
+| `created_at`    | `TIMESTAMP`   | The timestamp when the RFQ was submitted.                   |
+
+
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:
