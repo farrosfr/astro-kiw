@@ -1,6 +1,6 @@
-# Astro Starter Kit: Basics
+# B2B Electrical Supplies Project - SonusHUB for KIW
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+> This repository contains the source code for the B2B electrical supplies platform developed by SonusHUB for KIW.
 
 ## 🚀 Project Structure
 
@@ -58,7 +58,7 @@ In this project, state management is handled locally within the components that 
 
 This project uses a **MySQL** database to store product information. The connection is managed through a connection pool using the `mysql2` library, as configured in `src/lib/db.ts`.
 
-### Tabel `products`
+### `products` Table
 
 This is the primary table in the database, containing all product data.
 
@@ -74,7 +74,7 @@ This is the primary table in the database, containing all product data.
 | `brand`     | `VARCHAR(255)`| The brand name of the product.                               |
 | `created_at`| `TIMESTAMP`   | The timestamp when the product was added (defaults to `CURRENT_TIMESTAMP`). |
 
-### Tabel `rfq` (Request for Quote)
+### `rfq` (Request for Quote) Table
 
 This table stores submissions from the "Request for Quote" form.
 
@@ -91,6 +91,9 @@ This table stores submissions from the "Request for Quote" form.
 | `message`       | `TEXT`        | Any additional message from the customer (optional).        |
 | `created_at`    | `TIMESTAMP`   | The timestamp when the RFQ was submitted.                   |
 
+## Live Preview
+
+To see a live preview of this project, visit: [astro.sonushub.id](https://astro.sonushub.id)
 
 ## 🧞 Commands
 
