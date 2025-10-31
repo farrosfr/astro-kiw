@@ -26,6 +26,15 @@ Astro follows a clear and organized project structure. Here’s a breakdown of t
 
 To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
 
+## Tech Stack
+
+This project is built with the following technologies:
+
+- **[Astro](https://astro.build/)**: The web framework for building fast, content-focused websites.
+- **[Tailwind CSS](https://tailwindcss.com/)**: A utility-first CSS framework for rapid UI development.
+- **[TypeScript](https://www.typescriptlang.org/)**: A typed superset of JavaScript that compiles to plain JavaScript.
+- **[MySQL](https://www.mysql.com/)**: The database used for storing product and RFQ data.
+
 ## Components
 
 This project uses several reusable components to build its user interface:
