@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ProductCard from '../../components/ProductCard.astro';
 import { pool } from '../../lib/db';
 import type { Product } from '../../data/products';
 
@@ -34,6 +35,22 @@ const formattedPrice = product ? new Intl.NumberFormat('id-ID', {
   currency: 'IDR',
   minimumFractionDigits: 0,
 }).format(product.price) : '';
+
+let relatedProducts: Product[] = [];
+if (product) {
+  try {
+    const [relatedRows] = await pool.query(
+      'SELECT id, name, price, imageUrl, description, slug, kategori, brand FROM products WHERE kategori = ? AND slug != ? ORDER BY RAND() LIMIT 4',
+      [product.kategori, product.slug]
+    );
+    relatedProducts = (relatedRows as any[]).map(row => ({
+      ...row,
+      id: String(row.id),
+    }));
+  } catch (e) {
+    console.error('Error fetching related products:', e);
+  }
+}
 ---
 
 <Layout>
@@ -77,6 +94,17 @@ const formattedPrice = product ? new Intl.NumberFormat('id-ID', {
             </div>
           </div>
         </div>
+      )}
+
+      {relatedProducts.length > 0 && (
+        <section class="mt-12">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Produk Terkait</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {relatedProducts.map(p => (
+              <ProductCard product={p} />
+            ))}
+          </div>
+        </section>
       )}
     </div>
   </main>
