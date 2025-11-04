@@ -1,8 +1,24 @@
 ---
 import { Image } from 'astro:assets';
+import { pool } from '../lib/db';
+
+let topCategories: { kategori: string }[] = [];
+
+try {
+  const [rows] = await pool.query(`
+    SELECT kategori, COUNT(*) as product_count
+    FROM products
+    GROUP BY kategori
+    ORDER BY product_count DESC
+    LIMIT 5
+  `);
+  topCategories = rows as { kategori: string }[];
+} catch (error) {
+  console.error('Error fetching top categories:', error);
+}
 ---
 <footer class="bg-gray-800 text-gray-300 py-10">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-5 gap-8">
     <!-- Logo and About -->
     <div class="col-span-1 md:col-span-2">
       <Image src="/logo.png" alt="SonusHUB Logo" width={48} height={48} class="mb-4" />
@@ -21,6 +37,20 @@ import { Image } from 'astro:assets';
       </ul>
     </div>
 
+    <!-- Top Categories -->
+    <div>
+      <h3 class="text-lg font-semibold text-white mb-4">Top Kategori</h3>
+      <ul>
+        {topCategories.map(category => (
+          <li class="mb-2">
+            <a href={`/kategori/${category.kategori}`} class="hover:text-white transition-colors duration-200">
+              {category.kategori}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
     <!-- Contact Info -->
     <div>
       <h3 class="text-lg font-semibold text-white mb-4">Hubungi Kami</h3>
@@ -31,7 +61,7 @@ import { Image } from 'astro:assets';
         <a href="https://www.instagram.com/sonushub.id" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Instagram"><!-- Instagram Icon Placeholder -->
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.5" y1="6.5" y2="6.5"/></svg>
         </a>
-        <a href="https://www.linkedin.com/showcase/sonushubnom" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="LinkedIn"><!-- LinkedIn Icon Placeholder -->
+        <a href="https://www.linkedin.com/showcase/sonushub" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="LinkedIn"><!-- LinkedIn Icon Placeholder -->
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
         </a>
       </div>
