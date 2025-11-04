@@ -66,9 +66,15 @@ const formattedPrice = product ? new Intl.NumberFormat('id-ID', {
             <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Deskripsi Produk</h2>
             <p class="text-gray-600 leading-relaxed">{product.description}</p>
 
-            <button id="openRfqModal" class="mt-8 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-              Minta Penawaran
-            </button>
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+              <button id="openRfqModal" class="w-full sm:w-auto flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                Minta Penawaran
+              </button>
+              <a href="#" class="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 border border-blue-600 text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-bold py-3 px-4 rounded-lg transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                Unduh Datasheet
+              </a>
+            </div>
           </div>
         </div>
       )}
