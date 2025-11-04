@@ -50,7 +50,7 @@ This section documents the main pages and API endpoints of the application.
 
 - `/` (`src/pages/index.astro`): The homepage.
 - `/katalog` (`src/pages/katalog.astro`): Displays a full catalog of all products.
-- `/product/[slug]` (`src/pages/product/[slug].astro`): Shows the detail page for a single product based on its unique `slug`. This page now includes an "Unduh Datasheet" button.
+- `/product/[slug]` (`src/pages/product/[slug].astro`): Shows the detail page for a single product based on its unique `slug`. This page now includes an "Unduh Datasheet" button and a "Related Products" section.
 - `/kategori` (`src/pages/kategori.astro`): Displays a list of all available product categories.
 - `/kategori/[kategori]` (`src/pages/kategori/[kategori].astro`): Displays all products belonging to a specific category.
 - `/merk` (`src/pages/merk.astro`): Displays a list of all available product brands.
@@ -104,3 +104,20 @@ This table stores submissions from the "Request for Quote" form.
 ## Live Preview
 
 To see a live preview of this project, visit: [astro.sonushub.id](https://astro.sonushub.id)
+
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
