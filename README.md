@@ -81,6 +81,7 @@ This is the primary table in the database, containing all product data.
 | `slug`      | `VARCHAR(255)`| A URL-friendly slug for the product page (e.g., `kabel-nym-3x2-5mm`). |
 | `kategori`  | `VARCHAR(255)`| The category the product belongs to.                         |
 | `brand`     | `VARCHAR(255)`| The brand name of the product.                               |
+| `datasheetUrl`| `VARCHAR(255)`| (Planned) The URL path to the product's datasheet. Currently a placeholder. |
 | `created_at`| `TIMESTAMP`   | The timestamp when the product was added (defaults to `CURRENT_TIMESTAMP`). |
 
 ### `rfq` (Request for Quote) Table
@@ -103,20 +104,3 @@ This table stores submissions from the "Request for Quote" form.
 ## Live Preview
 
 To see a live preview of this project, visit: [astro.sonushub.id](https://astro.sonushub.id)
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
