@@ -5,14 +5,15 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "astro preview --host 0.0.0.0 --port 4322",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/node": "^9.5.0",
     "@astrojs/tailwind": "^6.0.2",
-    "astro": "^5.15.3",
+    "astro": "5.15.3",
     "mysql2": "^3.15.2",
     "tailwindcss": "^3.4.18"
   }
 }
+
