@@ -50,7 +50,7 @@ This section documents the main pages and API endpoints of the application.
 
 - `/` (`src/pages/index.astro`): The homepage.
 - `/katalog` (`src/pages/katalog.astro`): Displays a full catalog of all products.
-- `/product/[slug]` (`src/pages/product/[slug].astro`): Shows the detail page for a single product based on its unique `slug`.
+- `/product/[slug]` (`src/pages/product/[slug].astro`): Shows the detail page for a single product based on its unique `slug`. This page now includes an "Unduh Datasheet" button.
 - `/kategori` (`src/pages/kategori.astro`): Displays a list of all available product categories.
 - `/kategori/[kategori]` (`src/pages/kategori/[kategori].astro`): Displays all products belonging to a specific category.
 - `/merk` (`src/pages/merk.astro`): Displays a list of all available product brands.
