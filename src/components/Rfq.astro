@@ -1,0 +1,115 @@
+---
+import { pool } from '../lib/db';
+import type { Product } from '../data/products';
+
+let products: Product[] = [];
+try {
+    const [rows] = await pool.query('SELECT id, name FROM products');
+    products = rows as Product[];
+} catch (error) {
+    console.error("Failed to fetch products for RFQ form:", error);
+    // Handle the error appropriately
+    // Maybe render an error message or a disabled form
+}
+---
+
+<div id="rfq-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-8 rounded-lg w-1/2 max-h-[90vh] overflow-y-auto">
+        <h2 class="text-2xl font-bold mb-4">Request for Quotation</h2>
+        <form action="/api/rfq" method="POST">
+            <div id="product-entries">
+                <div class="product-entry mb-4 border-b pb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Product</label>
+                            <select name="product_id[]" class="w-full border border-gray-300 p-2 rounded">
+                                {products.map(product => (
+                                    <option value={product.id}>{product.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Quantity</label>
+                            <input type="number" name="quantity[]" class="w-full border border-gray-300 p-2 rounded" min="1" value="1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="add-product" class="bg-green-500 text-white px-4 py-2 rounded mb-4 text-sm">Add Another Product</button>
+            
+            <div class="mb-4">
+                <label for="custom-material" class="block text-gray-700">Custom Material (Optional)</label>
+                <textarea id="custom-material" name="custom_material" rows="3" class="w-full border border-gray-300 p-2 rounded"></textarea>
+            </div>
+
+            <h3 class="text-xl font-bold mt-6 mb-4">Your Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="mb-4">
+                    <label for="customer_name" class="block text-gray-700">Name</label>
+                    <input type="text" id="customer_name" name="customer_name" class="w-full border border-gray-300 p-2 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="company_name" class="block text-gray-700">Company Name (Optional)</label>
+                    <input type="text" id="company_name" name="company_name" class="w-full border border-gray-300 p-2 rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" class="w-full border border-gray-300 p-2 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="phone" class="block text-gray-700">Phone</label>
+                    <input type="tel" id="phone" name="phone" class="w-full border border-gray-300 p-2 rounded" required>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label for="message" class="block text-gray-700">Additional Message</label>
+                <textarea id="message" name="message" rows="4" class="w-full border border-gray-300 p-2 rounded"></textarea>
+            </div>
+            <div class="flex justify-end">
+                <button type="button" id="close-rfq-modal" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Close</button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit RFQ</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const addProductBtn = document.getElementById('add-product');
+        const productEntries = document.getElementById('product-entries');
+        if (productEntries && addProductBtn) {
+            const firstProductEntry = productEntries.querySelector('.product-entry');
+
+            addProductBtn.addEventListener('click', () => {
+                const newEntry = firstProductEntry.cloneNode(true) as HTMLElement;
+                
+                // Clear the values of the new entry
+                const select = newEntry.querySelector('select');
+                const input = newEntry.querySelector('input[type="number"]');
+                if (select) {
+                    select.selectedIndex = 0;
+                }
+                if (input) {
+                    input.value = '1';
+                }
+
+                // Add a remove button to the new entry
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.textContent = 'Remove';
+                removeBtn.className = 'bg-red-500 text-white px-2 py-1 rounded text-xs self-center';
+                removeBtn.addEventListener('click', () => {
+                    newEntry.remove();
+                });
+                
+                const gridContainer = newEntry.querySelector('.grid');
+                if(gridContainer) {
+                    gridContainer.appendChild(removeBtn);
+                }
+
+
+                productEntries.appendChild(newEntry);
+            });
+        }
+    });
+</script>
