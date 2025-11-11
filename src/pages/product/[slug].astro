@@ -1,8 +1,12 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Layout from '../../layouts/Layout.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { pool } from '../../lib/db';
 import type { Product } from '../../data/products';
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/placeholders/*.{jpeg,jpg,png,gif,webp}');
 
 const { slug } = Astro.params;
 
@@ -55,7 +59,7 @@ if (product) {
 
 <Layout title={product?.name || 'Detail Produk'}>
   <main class="p-4 sm:p-6 md:p-8">
-    <div class="max-w-7xl mx-auto pl-8 pr-8">
+    <div class="max-w-7xl mx-auto pl-0 pr-0 md:pl-8 md:pr-8">
       <a href="/katalog" class="text-blue-600 hover:underline mb-6 inline-block">&larr; Kembali ke Katalog</a>
 
       {error && (
@@ -68,7 +72,19 @@ if (product) {
       {product && (
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <img src={product.imageUrl} alt={`Gambar ${product.name}`} class="w-full h-auto rounded-lg shadow-md">
+            {product.imageUrl && images[`/src/assets/placeholders/${product.imageUrl}`] ? (
+              <Image 
+                src={images[`/src/assets/placeholders/${product.imageUrl}`]()} 
+                alt={`Gambar ${product.name}`} 
+                width={800} 
+                height={800} 
+                class="w-full h-auto rounded-lg shadow-md"
+              />
+            ) : (
+              <div class="w-full h-[800px] rounded-lg shadow-md bg-gray-200 flex items-center justify-center">
+                <span class="text-gray-500">Gambar tidak tersedia</span>
+              </div>
+            )}
           </div>
           <div>
             <h1 class="text-3xl font-bold text-gray-900">{product.name}</h1>
