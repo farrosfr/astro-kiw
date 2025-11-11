@@ -26,6 +26,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/placeho
         width={400} 
         height={400} 
         class="w-full aspect-square object-cover"
+        loading="eager"
       />
     ) : (
       <div class="w-full aspect-square bg-gray-200 flex items-center justify-center">
