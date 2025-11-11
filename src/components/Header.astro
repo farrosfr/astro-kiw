@@ -11,47 +11,59 @@ const navLinks = [
 ---
 
 <header class="bg-white shadow-md sticky top-0 z-50">
-	<nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-		<div class="flex items-center justify-between h-16">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<!-- Top Row -->
+		<div class="flex items-center justify-between h-20 border-b">
+			<!-- Left Side: Logo & Search -->
 			<div class="flex items-center">
 				<div class="flex-shrink-0">
 					<a href="/">
 						<Image src={sonusHubLogo} alt="SonusHUB Logo" width={160} height={40} class="h-10 w-auto" loading="eager" />
 					</a>
 				</div>
-				<!-- KOTAK PENCARIAN BARU -->
-				<div class="hidden md:block ml-6 relative">
+				<div class="hidden md:block ml-10 relative">
 					<input
 						type="search"
 						id="search-input-disabled"
-						placeholder="Cari produk... (Segera hadir!)"
-						class="bg-gray-100 border-gray-300 rounded-full py-2 px-4 pl-10 w-64 cursor-not-allowed"
-            readonly
+						placeholder="Cari produk..."
+						class="bg-gray-100 border-gray-300 rounded-full py-2 px-4 pl-10 w-80 focus:w-96 transition-all duration-300"
+						readonly
 					/>
 					<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-						<!-- Ikon Kaca Pembesar -->
 						<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 							<path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
 						</svg>
 					</div>
 				</div>
 			</div>
-			<div class="hidden md:block">
-				<div class="ml-10 flex items-baseline space-x-4">
-					{navLinks.map(link => (
-						<a href={link.href} class="text-gray-600 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">{link.name}</a>
-					))}
-				</div>
+
+			<!-- Right Side: Auth & RFQ Buttons -->
+			<div class="hidden md:flex items-center space-x-6">
+				<a href="/login" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+					Masuk / Daftar
+				</a>
+				<a href="/rfq" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-blue-700 transition-shadow shadow-sm hover:shadow-md">
+					Minta Penawaran
+				</a>
 			</div>
 		</div>
-	</nav>
+
+		<!-- Bottom Row: Navigation -->
+		<nav class="hidden md:flex items-center h-12">
+			<div class="flex items-baseline space-x-8">
+				{navLinks.map(link => (
+					<a href={link.href} class="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors">{link.name}</a>
+				))}
+			</div>
+		</nav>
+	</div>
 </header>
 
 <script>
   const searchInput = document.getElementById('search-input-disabled');
   if (searchInput) {
     searchInput.addEventListener('click', () => {
-      alert('Fitur pencarian canggih dengan Algolia akan segera hadir!');
+      alert('Fitur pencarian canggih akan segera hadir!');
     });
   }
 </script>
