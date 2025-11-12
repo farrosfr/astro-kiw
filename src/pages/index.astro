@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProductCard from '../components/ProductCard.astro';
+import HomepageBanner from '../components/HomepageBanner.astro'; // Impor banner baru
 import { pool } from '../lib/db';
 import type { Product } from '../data/products';
 
@@ -22,24 +23,9 @@ try {
 ---
 
 <Layout title="Beranda">
-  <!-- Hero Section -->
-  <section class="bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-      <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-        <span class="block">KIW<span class="text-blue-600"> B2B</span></span>
-      </h1>
-      <p class="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-gray-600">
-        Platform B2B dan B2G untuk material listrik, solusi industri cerdas, dan teknologi energi terbarukan. Kami menghubungkan bisnis dan pemerintah dengan produk serta sumber daya yang dibutuhkan untuk memenuhi kebutuhan proyek yang sedang Anda kerjakan.
-      </p>
-      <div class="mt-8 flex justify-center">
-        <div class="inline-flex rounded-md shadow">
-          <a href="/katalog" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-            Jelajahi Katalog
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  
+  <!-- New Banner Section -->
+  <HomepageBanner />
 
   <!-- Product Preview Section -->
   {previewProducts.length > 0 && (
