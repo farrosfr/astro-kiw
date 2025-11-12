@@ -43,6 +43,7 @@ This project uses several reusable components to build its user interface:
 - `Footer.astro`: The footer section, also displayed on all pages.
 - `ProductCard.astro`: A component to display a single product's summary, used in catalog and search result pages.
 - `Welcome.astro`: A component for the welcome section on the homepage.
+- `Rfq.astro`: A modal form for submitting "Request for Quotation" inquiries.
 
 ## Application Routes
 

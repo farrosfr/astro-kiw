@@ -1,4 +1,4 @@
----
+update---
 import { pool } from '../lib/db';
 import type { Product } from '../data/products';
 
@@ -80,36 +80,38 @@ try {
         if (productEntries && addProductBtn) {
             const firstProductEntry = productEntries.querySelector('.product-entry');
 
-            addProductBtn.addEventListener('click', () => {
-                const newEntry = firstProductEntry.cloneNode(true) as HTMLElement;
-                
-                // Clear the values of the new entry
-                const select = newEntry.querySelector('select');
-                const input = newEntry.querySelector('input[type="number"]');
-                if (select) {
-                    select.selectedIndex = 0;
-                }
-                if (input) {
-                    input.value = '1';
-                }
+            if (firstProductEntry) {
+                addProductBtn.addEventListener('click', () => {
+                    const newEntry = firstProductEntry.cloneNode(true) as HTMLElement;
+                    
+                    // Clear the values of the new entry
+                    const select = newEntry.querySelector('select');
+                    const input = newEntry.querySelector('input[type="number"]') as HTMLInputElement;
+                    if (select) {
+                        select.selectedIndex = 0;
+                    }
+                    if (input) {
+                        input.value = '1';
+                    }
 
-                // Add a remove button to the new entry
-                const removeBtn = document.createElement('button');
-                removeBtn.type = 'button';
-                removeBtn.textContent = 'Remove';
-                removeBtn.className = 'bg-red-500 text-white px-2 py-1 rounded text-xs self-center';
-                removeBtn.addEventListener('click', () => {
-                    newEntry.remove();
+                    // Add a remove button to the new entry
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.textContent = 'Remove';
+                    removeBtn.className = 'bg-red-500 text-white px-2 py-1 rounded text-xs self-center';
+                    removeBtn.addEventListener('click', () => {
+                        newEntry.remove();
+                    });
+                    
+                    const gridContainer = newEntry.querySelector('.grid');
+                    if(gridContainer) {
+                        gridContainer.appendChild(removeBtn);
+                    }
+
+
+                    productEntries.appendChild(newEntry);
                 });
-                
-                const gridContainer = newEntry.querySelector('.grid');
-                if(gridContainer) {
-                    gridContainer.appendChild(removeBtn);
-                }
-
-
-                productEntries.appendChild(newEntry);
-            });
+            }
         }
     });
 </script>
