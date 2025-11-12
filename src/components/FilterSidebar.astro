@@ -1,0 +1,105 @@
+---
+import { pool } from '../lib/db';
+
+// Fetch unique categories and brands from the database
+let categories: string[] = [];
+let brands: string[] = [];
+let dbError: string | null = null;
+
+try {
+  const [categoryRows] = await pool.query('SELECT DISTINCT kategori FROM products WHERE kategori IS NOT NULL AND kategori != "" ORDER BY kategori ASC');
+  const [brandRows] = await pool.query('SELECT DISTINCT brand FROM products WHERE brand IS NOT NULL AND brand != "" ORDER BY brand ASC');
+  categories = (categoryRows as any[]).map(row => row.kategori);
+  brands = (brandRows as any[]).map(row => row.brand);
+} catch (e) {
+  console.error("Failed to fetch filter data:", e);
+  dbError = "Gagal memuat data filter.";
+}
+
+export interface Props {
+    currentCategories?: string[];
+    currentBrands?: string[];
+    minPrice?: string;
+    maxPrice?: string;
+}
+
+const { 
+    currentCategories = [], 
+    currentBrands = [], 
+    minPrice = '', 
+    maxPrice = '' 
+} = Astro.props;
+---
+<aside class="w-full md:w-1/4 lg:w-1/5 p-4 border-r border-gray-200">
+    <h2 class="text-2xl font-bold mb-6">Filter</h2>
+
+    {dbError && <p class="text-red-500">{dbError}</p>}
+
+    <form method="GET" action="/katalog">
+        <div class="mb-6">
+            <h3 class="font-semibold mb-3 text-lg">Kategori</h3>
+            <div class="space-y-2 max-h-60 overflow-y-auto">
+                {categories.map(category => (
+                    <label class="flex items-center">
+                        <input 
+                            type="checkbox" 
+                            name="kategori" 
+                            value={category}
+                            checked={currentCategories.includes(category)}
+                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        >
+                        <span class="ml-3 text-gray-700">{category}</span>
+                    </label>
+                ))}
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h3 class="font-semibold mb-3 text-lg">Merk</h3>
+            <div class="space-y-2 max-h-60 overflow-y-auto">
+                {brands.map(brand => (
+                    <label class="flex items-center">
+                        <input 
+                            type="checkbox" 
+                            name="brand" 
+                            value={brand}
+                            checked={currentBrands.includes(brand)}
+                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        >
+                        <span class="ml-3 text-gray-700">{brand}</span>
+                    </label>
+                ))}
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h3 class="font-semibold mb-3 text-lg">Rentang Harga</h3>
+            <div class="flex items-center space-x-2">
+                <input 
+                    type="number" 
+                    name="min_price" 
+                    placeholder="Min" 
+                    value={minPrice}
+                    class="w-full p-2 border rounded"
+                >
+                <span>-</span>
+                <input 
+                    type="number" 
+                    name="max_price" 
+                    placeholder="Max" 
+                    value={maxPrice}
+                    class="w-full p-2 border rounded"
+                >
+            </div>
+        </div>
+
+        <div class="flex flex-col space-y-2">
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">
+                Terapkan Filter
+            </button>
+            <a href="/katalog" class="w-full text-center bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition">
+                Reset Filter
+            </a>
+        </div>
+    </form>
+</aside>

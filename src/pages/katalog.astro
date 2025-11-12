@@ -1,18 +1,59 @@
 gas---
 import Layout from '../layouts/Layout.astro';
 import ProductCard from '../components/ProductCard.astro';
+import FilterSidebar from '../components/FilterSidebar.astro';
 import { pool } from '../lib/db';
 import type { Product } from '../data/products';
+
+// --- Logic untuk Filtering ---
+const searchParams = Astro.url.searchParams;
+
+const categories = searchParams.getAll('kategori');
+const brands = searchParams.getAll('brand');
+const minPrice = searchParams.get('min_price');
+const maxPrice = searchParams.get('max_price');
 
 let products: Product[] = [];
 let error: string | null = null;
 
 try {
-  const [rows] = await pool.query('SELECT id, name, price, imageUrl, description, slug, kategori, brand FROM products ORDER BY created_at DESC');
+  let sql = 'SELECT id, name, price, imageUrl, description, slug, kategori, brand FROM products';
+  const conditions: string[] = [];
+  const params: (string | number | (string | number)[])[] = [];
+
+  if (categories.length > 0) {
+    conditions.push('kategori IN (?)');
+    params.push(categories);
+  }
+
+  if (brands.length > 0) {
+    conditions.push('brand IN (?)');
+    params.push(brands);
+  }
+
+  if (minPrice) {
+    conditions.push('price >= ?');
+    params.push(Number(minPrice));
+  }
+
+  if (maxPrice) {
+    conditions.push('price <= ?');
+    params.push(Number(maxPrice));
+  }
+
+  if (conditions.length > 0) {
+    sql += ' WHERE ' + conditions.join(' AND ');
+  }
+
+  sql += ' ORDER BY created_at DESC';
+
+  const [rows] = await pool.query(sql, params);
+  
   products = (rows as any[]).map(row => ({
     ...row,
     id: String(row.id),
   }));
+
 } catch (e: any) {
   console.error(e);
   error = "Tidak dapat memuat produk. Silakan coba lagi nanti.";
@@ -23,23 +64,40 @@ try {
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <h1 class="text-4xl font-bold text-center mb-12">Katalog Produk Lengkap</h1>
     
-    {error && (
-      <div class="text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <strong class="font-bold">Error!</strong>
-        <span class="block sm:inline"> {error}</span>
+    <div class="flex flex-col md:flex-row gap-8">
+      <FilterSidebar 
+        currentCategories={categories}
+        currentBrands={brands}
+        minPrice={minPrice || ''}
+        maxPrice={maxPrice || ''}
+      />
+
+      <div class="w-full">
+        {error && (
+          <div class="text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="block sm:inline"> {error}</span>
+          </div>
+        )}
+
+        {!error && products.length === 0 && (
+          <div class="text-center p-10 border rounded-lg">
+            <h3 class="text-xl font-semibold text-gray-700">Tidak Ada Produk Ditemukan</h3>
+            <p class="text-gray-500 mt-2">Coba ubah atau reset filter Anda untuk melihat lebih banyak produk.</p>
+            <a href="/katalog" class="mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">
+                Reset Semua Filter
+            </a>
+          </div>
+        )}
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {
+            products.map(product => (
+              <ProductCard product={product} />
+            ))
+          }
+        </div>
       </div>
-    )}
-
-    {!error && products.length === 0 && (
-      <p class="text-center text-gray-500">Belum ada produk di dalam database.</p>
-    )}
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {
-        products.map(product => (
-          <ProductCard product={product} />
-        ))
-      }
     </div>
   </main>
 </Layout>

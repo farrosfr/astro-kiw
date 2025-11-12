@@ -44,13 +44,14 @@ This project uses several reusable components to build its user interface:
 - `ProductCard.astro`: A component to display a single product's summary, used in catalog and search result pages.
 - `Welcome.astro`: A component for the welcome section on the homepage.
 - `Rfq.astro`: A modal form for submitting "Request for Quotation" inquiries.
+- `FilterSidebar.astro`: A sidebar component used on the catalog page for filtering products by category, brand, and price range.
 
 ## Application Routes
 
 This section documents the main pages and API endpoints of the application.
 
 - `/` (`src/pages/index.astro`): The homepage.
-- `/katalog` (`src/pages/katalog.astro`): Displays a full catalog of all products.
+- `/katalog` (`src/pages/katalog.astro`): Displays a full catalog of all products, now with filtering capabilities by category, brand, and price range.
 - `/product/[slug]` (`src/pages/product/[slug].astro`): Shows the detail page for a single product based on its unique `slug`. This page now includes an "Unduh Datasheet" button and a "Related Products" section.
 - `/kategori` (`src/pages/kategori.astro`): Displays a list of all available product categories.
 - `/kategori/[kategori]` (`src/pages/kategori/[kategori].astro`): Displays all products belonging to a specific category.
