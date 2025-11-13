@@ -30,65 +30,65 @@ const {
     maxPrice = '' 
 } = Astro.props;
 ---
-<aside class="w-full md:w-1/4 lg:w-1/5 p-4 border-r border-gray-200">
-    <h2 class="text-2xl font-bold mb-6">Filter</h2>
+<aside class="w-full md:w-1/4 lg:w-1/5 p-4 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Filter</h2>
 
     {dbError && <p class="text-red-500">{dbError}</p>}
 
     <form method="GET" action="/katalog">
         <div class="mb-6">
-            <h3 class="font-semibold mb-3 text-lg">Kategori</h3>
-            <div class="space-y-2 max-h-60 overflow-y-auto">
+            <h3 class="font-semibold mb-3 text-lg text-gray-800 dark:text-gray-200">Kategori</h3>
+            <div class="space-y-2 max-h-60 overflow-y-auto pr-2">
                 {categories.map(category => (
-                    <label class="flex items-center">
+                    <label class="flex items-center text-gray-700 dark:text-gray-300">
                         <input 
                             type="checkbox" 
                             name="kategori" 
                             value={category}
                             checked={currentCategories.includes(category)}
-                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            class="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 bg-gray-50 dark:bg-gray-700"
                         >
-                        <span class="ml-3 text-gray-700">{category}</span>
+                        <span class="ml-3">{category}</span>
                     </label>
                 ))}
             </div>
         </div>
 
         <div class="mb-6">
-            <h3 class="font-semibold mb-3 text-lg">Merk</h3>
-            <div class="space-y-2 max-h-60 overflow-y-auto">
+            <h3 class="font-semibold mb-3 text-lg text-gray-800 dark:text-gray-200">Merk</h3>
+            <div class="space-y-2 max-h-60 overflow-y-auto pr-2">
                 {brands.map(brand => (
-                    <label class="flex items-center">
+                    <label class="flex items-center text-gray-700 dark:text-gray-300">
                         <input 
                             type="checkbox" 
                             name="brand" 
                             value={brand}
                             checked={currentBrands.includes(brand)}
-                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            class="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 bg-gray-50 dark:bg-gray-700"
                         >
-                        <span class="ml-3 text-gray-700">{brand}</span>
+                        <span class="ml-3">{brand}</span>
                     </label>
                 ))}
             </div>
         </div>
 
         <div class="mb-6">
-            <h3 class="font-semibold mb-3 text-lg">Rentang Harga</h3>
+            <h3 class="font-semibold mb-3 text-lg text-gray-800 dark:text-gray-200">Rentang Harga</h3>
             <div class="flex items-center space-x-2">
                 <input 
                     type="number" 
                     name="min_price" 
                     placeholder="Min" 
                     value={minPrice}
-                    class="w-full p-2 border rounded"
+                    class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                 >
-                <span>-</span>
+                <span class="text-gray-700 dark:text-gray-300">-</span>
                 <input 
                     type="number" 
                     name="max_price" 
                     placeholder="Max" 
                     value={maxPrice}
-                    class="w-full p-2 border rounded"
+                    class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                 >
             </div>
         </div>
@@ -97,7 +97,7 @@ const {
             <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">
                 Terapkan Filter
             </button>
-            <a href="/katalog" class="w-full text-center bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition">
+            <a href="/katalog" class="w-full text-center bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">
                 Reset Filter
             </a>
         </div>

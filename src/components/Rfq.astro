@@ -14,60 +14,60 @@ try {
 ---
 
 <div id="rfq-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white p-8 rounded-lg w-1/2 max-h-[90vh] overflow-y-auto">
-        <h2 class="text-2xl font-bold mb-4">Request for Quotation</h2>
+    <div class="bg-white dark:bg-gray-800 p-8 rounded-lg w-1/2 max-h-[90vh] overflow-y-auto">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Request for Quotation</h2>
         <form action="/api/rfq" method="POST">
             <div id="product-entries">
-                <div class="product-entry mb-4 border-b pb-4">
+                <div class="product-entry mb-4 border-b dark:border-gray-700 pb-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="mb-4">
-                            <label class="block text-gray-700">Product</label>
-                            <select name="product_id[]" class="w-full border border-gray-300 p-2 rounded">
+                            <label class="block text-gray-700 dark:text-gray-300">Product</label>
+                            <select name="product_id[]" class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded">
                                 {products.map(product => (
                                     <option value={product.id}>{product.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700">Quantity</label>
-                            <input type="number" name="quantity[]" class="w-full border border-gray-300 p-2 rounded" min="1" value="1">
+                            <label class="block text-gray-700 dark:text-gray-300">Quantity</label>
+                            <input type="number" name="quantity[]" class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded" min="1" value="1">
                         </div>
                     </div>
                 </div>
             </div>
-            <button type="button" id="add-product" class="bg-green-500 text-white px-4 py-2 rounded mb-4 text-sm">Add Another Product</button>
+            <button type="button" id="add-product" class="bg-green-500 text-white px-4 py-2 rounded mb-4 text-sm hover:bg-green-600">Add Another Product</button>
             
             <div class="mb-4">
-                <label for="custom-material" class="block text-gray-700">Custom Material (Optional)</label>
-                <textarea id="custom-material" name="custom_material" rows="3" class="w-full border border-gray-300 p-2 rounded"></textarea>
+                <label for="custom-material" class="block text-gray-700 dark:text-gray-300">Custom Material (Optional)</label>
+                <textarea id="custom-material" name="custom_material" rows="3" class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded"></textarea>
             </div>
 
-            <h3 class="text-xl font-bold mt-6 mb-4">Your Information</h3>
+            <h3 class="text-xl font-bold mt-6 mb-4 text-gray-900 dark:text-white">Your Information</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="mb-4">
-                    <label for="customer_name" class="block text-gray-700">Name</label>
-                    <input type="text" id="customer_name" name="customer_name" class="w-full border border-gray-300 p-2 rounded" required>
+                    <label for="customer_name" class="block text-gray-700 dark:text-gray-300">Name</label>
+                    <input type="text" id="customer_name" name="customer_name" class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded" required>
                 </div>
                 <div class="mb-4">
-                    <label for="company_name" class="block text-gray-700">Company Name (Optional)</label>
-                    <input type="text" id="company_name" name="company_name" class="w-full border border-gray-300 p-2 rounded">
+                    <label for="company_name" class="block text-gray-700 dark:text-gray-300">Company Name (Optional)</label>
+                    <input type="text" id="company_name" name="company_name" class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded">
                 </div>
                 <div class="mb-4">
-                    <label for="email" class="block text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" class="w-full border border-gray-300 p-2 rounded" required>
+                    <label for="email" class="block text-gray-700 dark:text-gray-300">Email</label>
+                    <input type="email" id="email" name="email" class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded" required>
                 </div>
                 <div class="mb-4">
-                    <label for="phone" class="block text-gray-700">Phone</label>
-                    <input type="tel" id="phone" name="phone" class="w-full border border-gray-300 p-2 rounded" required>
+                    <label for="phone" class="block text-gray-700 dark:text-gray-300">Phone</label>
+                    <input type="tel" id="phone" name="phone" class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded" required>
                 </div>
             </div>
             <div class="mb-4">
-                <label for="message" class="block text-gray-700">Additional Message</label>
-                <textarea id="message" name="message" rows="4" class="w-full border border-gray-300 p-2 rounded"></textarea>
+                <label for="message" class="block text-gray-700 dark:text-gray-300">Additional Message</label>
+                <textarea id="message" name="message" rows="4" class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded"></textarea>
             </div>
             <div class="flex justify-end">
-                <button type="button" id="close-rfq-modal" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Close</button>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit RFQ</button>
+                <button type="button" id="close-rfq-modal" class="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600">Close</button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit RFQ</button>
             </div>
         </form>
     </div>
@@ -98,7 +98,7 @@ try {
                     const removeBtn = document.createElement('button');
                     removeBtn.type = 'button';
                     removeBtn.textContent = 'Remove';
-                    removeBtn.className = 'bg-red-500 text-white px-2 py-1 rounded text-xs self-center';
+                    removeBtn.className = 'bg-red-500 text-white px-2 py-1 rounded text-xs self-center hover:bg-red-600';
                     removeBtn.addEventListener('click', () => {
                         newEntry.remove();
                     });

@@ -17,7 +17,7 @@ const formattedPrice = new Intl.NumberFormat('id-ID', {
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/placeholders/*.{jpeg,jpg,png,gif,webp}');
 ---
 
-<div class="border rounded-lg shadow-md overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300 flex flex-col">
+<div class="border rounded-lg shadow-md overflow-hidden bg-white dark:bg-gray-800 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300 flex flex-col">
   <a href={`/product/${product.slug}`}>
     {product.imageUrl && images[`/src/assets/placeholders/${product.imageUrl}`] ? (
       <Image 
@@ -29,16 +29,16 @@ const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/placeho
         loading="eager"
       />
     ) : (
-      <div class="w-full aspect-square bg-gray-200 flex items-center justify-center">
-        <span class="text-gray-500">Gambar tidak tersedia</span>
+      <div class="w-full aspect-square bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+        <span class="text-gray-500 dark:text-gray-400">Gambar tidak tersedia</span>
       </div>
     )}
   </a>
   <div class="p-4 flex flex-col flex-grow">
-    <h3 class="text-lg font-semibold text-gray-800 truncate" title={product.name}>
-      <a href={`/product/${product.slug}`} class="hover:text-blue-600">{product.name}</a>
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 truncate" title={product.name}>
+      <a href={`/product/${product.slug}`} class="hover:text-blue-600 dark:hover:text-blue-400">{product.name}</a>
     </h3>
-    <div class="text-sm text-gray-500 mt-1">
+    <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">
       {product.kategori && (
         <a href={`/kategori/${product.kategori.toLowerCase().replace(/\s+/g, '-')}`} class="hover:underline">{product.kategori}</a>
       )}
@@ -48,7 +48,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/placeho
       )}
     </div>
     <div class="mt-auto pt-2">
-      <p class="text-xl font-bold text-gray-900">{formattedPrice}</p>
+      <p class="text-xl font-bold text-gray-900 dark:text-white">{formattedPrice}</p>
     </div>
   </div>
 </div>

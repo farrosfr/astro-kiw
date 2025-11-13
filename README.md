@@ -35,6 +35,10 @@ This project is built with the following technologies:
 - **[TypeScript](https://www.typescriptlang.org/)**: A typed superset of JavaScript that compiles to plain JavaScript.
 - **[MySQL](https://www.mysql.com/)**: The database used for storing product and RFQ data.
 
+## Features
+
+- **Dark Mode**: Implemented site-wide dark mode for improved user experience and modern aesthetics.
+
 ## Components
 
 This project uses several reusable components to build its user interface:

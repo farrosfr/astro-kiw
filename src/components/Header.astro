@@ -10,10 +10,10 @@ const navLinks = [
 ];
 ---
 
-<header class="bg-white shadow-md sticky top-0 z-50">
+<header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<!-- Top Row -->
-		<div class="flex items-center justify-between h-20 border-b">
+		<div class="flex items-center justify-between h-20 border-b dark:border-gray-700">
 			<!-- Left Side: Logo & Search -->
 			<div class="flex items-center">
 				<div class="flex-shrink-0">
@@ -26,7 +26,7 @@ const navLinks = [
 						type="search"
 						id="search-input-disabled"
 						placeholder="Cari produk..."
-						class="bg-gray-100 border-gray-300 rounded-full py-2 px-4 pl-10 w-80 focus:w-96 transition-all duration-300"
+						class="bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-full py-2 px-4 pl-10 w-80 focus:w-96 transition-all duration-300 dark:text-gray-200"
 						readonly
 					/>
 					<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -38,8 +38,12 @@ const navLinks = [
 			</div>
 
 			<!-- Right Side: Auth & RFQ Buttons -->
-			<div class="hidden md:flex items-center space-x-6">
-				<button type="button" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+			<div class="hidden md:flex items-center space-x-4">
+				<button id="theme-toggle" type="button" class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+					<svg id="theme-toggle-dark-icon" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+					<svg id="theme-toggle-light-icon" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.121-3.536a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM3.05 4.536a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM16.95 15.464a1 1 0 01-1.414 0l-.707-.707a1 1 0 10-1.414 1.414l.707.707a1 1 0 010 1.414zM4.536 16.95a1 1 0 01-1.414 0l-.707-.707a1 1 0 00-1.414 1.414l.707.707a1 1 0 011.414 0zm-3.536-2.121a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414l-.707-.707a1 1 0 010-1.414z"></path></svg>
+				</button>
+				<button type="button" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
 					Masuk / Daftar
 				</button>
 				<button type="button" id="open-rfq-modal-header" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-blue-700 transition-shadow shadow-sm hover:shadow-md">
@@ -52,7 +56,7 @@ const navLinks = [
 		<nav class="hidden md:flex items-center h-12">
 			<div class="flex items-baseline space-x-8">
 				{navLinks.map(link => (
-					<a href={link.href} class="text-gray-700 hover:text-blue-600 text-sm font-medium transition-colors">{link.name}</a>
+					<a href={link.href} class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 text-sm font-medium transition-colors">{link.name}</a>
 				))}
 			</div>
 		</nav>
@@ -60,10 +64,49 @@ const navLinks = [
 </header>
 
 <script>
+  // Search input placeholder
   const searchInput = document.getElementById('search-input-disabled');
   if (searchInput) {
     searchInput.addEventListener('click', () => {
       alert('Fitur pencarian canggih akan segera hadir!');
     });
   }
+
+  // Theme toggle
+	const themeToggleBtn = document.getElementById('theme-toggle');
+	const darkIcon = document.getElementById('theme-toggle-dark-icon');
+	const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+	// Set initial icon state
+	if (document.documentElement.classList.contains('dark')) {
+		lightIcon?.classList.remove('hidden');
+	} else {
+		darkIcon?.classList.remove('hidden');
+	}
+
+	themeToggleBtn?.addEventListener('click', () => {
+		// toggle icons
+		darkIcon?.classList.toggle('hidden');
+		lightIcon?.classList.toggle('hidden');
+
+		// if set via local storage previously
+		if (localStorage.getItem('theme')) {
+			if (localStorage.getItem('theme') === 'light') {
+				document.documentElement.classList.add('dark');
+				localStorage.setItem('theme', 'dark');
+			} else {
+				document.documentElement.classList.remove('dark');
+				localStorage.setItem('theme', 'light');
+			}
+		// if NOT set via local storage previously
+		} else {
+			if (document.documentElement.classList.contains('dark')) {
+				document.documentElement.classList.remove('dark');
+				localStorage.setItem('theme', 'light');
+			} else {
+				document.documentElement.classList.add('dark');
+				localStorage.setItem('theme', 'dark');
+			}
+		}
+	});
 </script>
